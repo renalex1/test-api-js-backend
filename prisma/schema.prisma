@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URI")
+}
+
+enum UserRole {
+  REGULAR
+  ADMIN
+}
+
+enum AuthMethod {
+  CREDENTIALS
+  GOOGLE
+  OUTLOOK
+  YANDEX
+}
+
+enum TokenType {
+  VERIFICATION
+  TWO_FACTOR
+  PASSWORD_RESET
+}
+
+model User {
+  id                String     @id @default(uuid())
+  email             String     @unique
+  password          String
+  displayName       String     @map("display_name")
+  avatar            String?
+  role              UserRole   @default(REGULAR)
+  isVerified        Boolean    @default(false) @map("is_verified")
+  isTwoFactorEnable Boolean    @default(false) @map("is_two_factor_enable")
+  method            AuthMethod
+  accounts          Account[]
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Account {
+  id           String   @id @default(uuid())
+  type         String
+  provider     String
+  refreshToken String?  @map("refresh_token")
+  accessToken  String?  @map("access_token")
+  expiresAt    Int      @map("expires_at")
+  user         User?    @relation(fields: [userId], references: [id])
+  userId       String?  @map("user_id ")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("accounts")
+}
+
+model Company {
+  id             String    @id @default(uuid())
+  name           String    @map("name")
+  shortName      String    @map("short_name")
+  businessEntity String    @unique @map("business_entity")
+  type           String[]  @map("type")
+  status         String    @default("active") @map("status")
+  address        String?   @map("address")
+  contactId      String?   @unique @map("contact_id")
+  contractId     String?   @unique @map("contract_id")
+  photos         Photo[]
+  contacts       Contact[]
+  contract       Contract?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  @@map("companies")
+}
+
+model Contact {
+  id         String    @id @default(uuid())
+  lastName   String    @map("last_name")
+  firstName  String    @unique @map("first_name")
+  patronymic String
+  phone      String
+  email      String    @unique
+  companyId  String?   @unique @map("company_id")
+  company    Company?  @relation(fields: [companyId], references: [id])
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@map("contacts")
+}
+
+model Contract {
+  id        String   @id @default(uuid())
+  no        String   @map("no")
+  issueDate DateTime @map("issue_date")
+  companyId String?  @unique @map("company_id")
+  company Company? @relation(fields: [companyId], references: [id])
+
+  @@map("contracts")
+}
+
+model Photo {
+  id        String   @id @default(uuid()) @map("id") @db.Uuid
+  name      String
+  filepath  String
+  thumbpath String   @map("thumb_path")
+  companyId String?  @map("company_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  @@map("photos")
+}

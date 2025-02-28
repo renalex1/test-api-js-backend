@@ -8,3 +8,30 @@ npm-debug.log
 .vscode-test
 .vscode
 .idea
+
+
+# Logs
+logs/
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+.env*
+*.env.*
+!.env.example
+
+# Package Manager Lock Files
+bun.lock
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
