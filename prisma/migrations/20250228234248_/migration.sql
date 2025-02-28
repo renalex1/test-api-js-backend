@@ -9,10 +9,10 @@ CREATE TYPE "TokenType" AS ENUM ('VERIFICATION', 'TWO_FACTOR', 'PASSWORD_RESET')
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "display_name" TEXT NOT NULL,
+    "full_name" TEXT NOT NULL,
     "avatar" TEXT,
     "role" "UserRole" NOT NULL DEFAULT 'REGULAR',
     "is_verified" BOOLEAN NOT NULL DEFAULT false,
@@ -26,13 +26,13 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "accounts" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "refresh_token" TEXT,
     "access_token" TEXT,
     "expires_at" INTEGER NOT NULL,
-    "user_id " TEXT,
+    "user_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -41,15 +41,15 @@ CREATE TABLE "accounts" (
 
 -- CreateTable
 CREATE TABLE "companies" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "short_name" TEXT NOT NULL,
     "business_entity" TEXT NOT NULL,
     "type" TEXT[],
     "status" TEXT NOT NULL DEFAULT 'active',
     "address" TEXT,
-    "contact_id" TEXT,
-    "contract_id" TEXT,
+    "contact_id" INTEGER,
+    "contract_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -59,13 +59,13 @@ CREATE TABLE "companies" (
 
 -- CreateTable
 CREATE TABLE "contacts" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "last_name" TEXT NOT NULL,
     "first_name" TEXT NOT NULL,
     "patronymic" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "company_id" TEXT,
+    "company_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -75,21 +75,21 @@ CREATE TABLE "contacts" (
 
 -- CreateTable
 CREATE TABLE "contracts" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "no" TEXT NOT NULL,
     "issue_date" TIMESTAMP(3) NOT NULL,
-    "company_id" TEXT,
+    "company_id" INTEGER,
 
     CONSTRAINT "contracts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "photos" (
-    "id" UUID NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "filepath" TEXT NOT NULL,
     "thumb_path" TEXT NOT NULL,
-    "company_id" TEXT,
+    "company_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -109,9 +109,6 @@ CREATE UNIQUE INDEX "companies_contact_id_key" ON "companies"("contact_id");
 CREATE UNIQUE INDEX "companies_contract_id_key" ON "companies"("contract_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "contacts_first_name_key" ON "contacts"("first_name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "contacts_email_key" ON "contacts"("email");
 
 -- CreateIndex
@@ -121,7 +118,7 @@ CREATE UNIQUE INDEX "contacts_company_id_key" ON "contacts"("company_id");
 CREATE UNIQUE INDEX "contracts_company_id_key" ON "contracts"("company_id");
 
 -- AddForeignKey
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id _fkey" FOREIGN KEY ("user_id ") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "contacts" ADD CONSTRAINT "contacts_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
