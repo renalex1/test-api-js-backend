@@ -19,7 +19,7 @@ const getAuth = [
 ];
 
 
-const createUser = [
+const postCreateUser = [
   check("email")
     .notEmpty()
     .withMessage({
@@ -51,4 +51,30 @@ const createUser = [
   validate,
 ];
 
-module.exports = { getAuth, createUser };
+const postLoginUser = [
+  check("email")
+    .notEmpty()
+    .withMessage({
+      code: UnprocessableEntity,
+      message: "email: parameter is required",
+    })
+    .isEmail()
+    .withMessage({
+      code: UnprocessableEntity,
+      message: "email: invalid email format",
+    }),
+  check("password")
+    .notEmpty()
+    .withMessage({
+      code: UnprocessableEntity,
+      message: "password: parameter is required",
+    })
+    .isLength({ min: 6 })
+    .withMessage({
+      code: UnprocessableEntity,
+      message: "password: must be at least 6 characters",
+    }),
+  validate,
+];
+
+module.exports = { getAuth, postCreateUser, postLoginUser };

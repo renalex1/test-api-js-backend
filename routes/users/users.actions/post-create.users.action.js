@@ -8,14 +8,14 @@ const { hash } = require('argon2');
 
 /**
  * @todo: Предполагается к удалению по факту реализации требований тестового задания.
- * GET /users
+ * POST /users
  * Служебный эндпоинт для регистрации пользователя.
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}
  */
-async function createUser(req, res) {
-  logger.init("create user");
+async function postCreateUser(req, res) {
+  logger.init("post create user");
 
   const { email, password, full_name, role } = req.query;
 
@@ -78,5 +78,5 @@ async function createUser(req, res) {
 }
 
 module.exports = {
-  createUser,
+  postCreateUser,
 };
