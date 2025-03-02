@@ -35,9 +35,11 @@ model User {
   isVerified        Boolean    @default(false) @map("is_verified")
   isTwoFactorEnable Boolean    @default(false) @map("is_two_factor_enable")
   method            AuthMethod
-  accounts          Account[]
   createdAt         DateTime   @default(now()) @map("created_at")
   updatedAt         DateTime   @updatedAt @map("updated_at")
+  companies         Company[]  @relation("UserCompanies")
+
+  accounts Account[]
 
   @@map("users")
 }
@@ -49,10 +51,11 @@ model Account {
   refreshToken String?  @map("refresh_token")
   accessToken  String?  @map("access_token")
   expiresAt    Int      @map("expires_at")
-  user         User?    @relation(fields: [userId], references: [id])
   userId       Int?     @map("user_id")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id])
 
   @@map("accounts")
 }
@@ -65,14 +68,15 @@ model Company {
   type           String[]  @map("type")
   status         String    @default("active") @map("status")
   address        String?   @map("address")
-  contactId      Int?      @unique @map("contact_id")
-  contractId     Int?      @unique @map("contract_id")
-  photos         Photo[]
-  contacts       Contact[]
-  contract       Contract?
+  userId         Int       @map("user_id")
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
   deletedAt      DateTime? @map("deleted_at")
+
+  contacts  Contact[]  @relation("CompanyContacts")
+  contracts Contract[] @relation("CompanyContracts")
+  photos    Photo[]    @relation("CompanyPhotos")
+  user      User       @relation("UserCompanies", fields: [userId], references: [id])
 
   @@map("companies")
 }
@@ -84,34 +88,41 @@ model Contact {
   patronymic String
   phone      String
   email      String    @unique
-  companyId  Int?      @unique @map("company_id")
-  company    Company?  @relation(fields: [companyId], references: [id])
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")
   deletedAt  DateTime? @map("deleted_at")
+
+  companies Company @relation("CompanyContacts", fields: [companyId], references: [id])
+  companyId Int
 
   @@map("contacts")
 }
 
 model Contract {
-  id        Int      @id @default(autoincrement())
-  no        String   @map("no")
-  issueDate DateTime @map("issue_date")
-  companyId Int?     @unique @map("company_id")
-  company   Company? @relation(fields: [companyId], references: [id])
+  id        Int       @id @default(autoincrement())
+  no        String    @map("no")
+  issueDate DateTime  @map("issue_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  companies Company @relation("CompanyContracts", fields: [companyId], references: [id])
+  companyId Int
 
   @@map("contracts")
 }
 
 model Photo {
-  id        Int      @id @default(autoincrement()) @map("id")
+  id        Int       @id @default(autoincrement()) @map("id")
   name      String
   filepath  String
-  thumbpath String   @map("thumb_path")
-  companyId Int?     @map("company_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  company   Company? @relation(fields: [companyId], references: [id])
+  thumbpath String    @map("thumb_path")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  companies Company @relation("CompanyPhotos", fields: [companyId], references: [id])
+  companyId Int
 
   @@map("photos")
 }

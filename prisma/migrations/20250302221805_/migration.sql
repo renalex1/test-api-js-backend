@@ -48,8 +48,7 @@ CREATE TABLE "companies" (
     "type" TEXT[],
     "status" TEXT NOT NULL DEFAULT 'active',
     "address" TEXT,
-    "contact_id" INTEGER,
-    "contract_id" INTEGER,
+    "user_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -65,10 +64,10 @@ CREATE TABLE "contacts" (
     "patronymic" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "company_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
+    "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "contacts_pkey" PRIMARY KEY ("id")
 );
@@ -78,7 +77,10 @@ CREATE TABLE "contracts" (
     "id" SERIAL NOT NULL,
     "no" TEXT NOT NULL,
     "issue_date" TIMESTAMP(3) NOT NULL,
-    "company_id" INTEGER,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+    "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "contracts_pkey" PRIMARY KEY ("id")
 );
@@ -89,9 +91,10 @@ CREATE TABLE "photos" (
     "name" TEXT NOT NULL,
     "filepath" TEXT NOT NULL,
     "thumb_path" TEXT NOT NULL,
-    "company_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+    "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "photos_pkey" PRIMARY KEY ("id")
 );
@@ -103,28 +106,19 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "companies_business_entity_key" ON "companies"("business_entity");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "companies_contact_id_key" ON "companies"("contact_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "companies_contract_id_key" ON "companies"("contract_id");
-
--- CreateIndex
 CREATE UNIQUE INDEX "contacts_email_key" ON "contacts"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "contacts_company_id_key" ON "contacts"("company_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "contracts_company_id_key" ON "contracts"("company_id");
 
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "contacts" ADD CONSTRAINT "contacts_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "companies" ADD CONSTRAINT "companies_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "contracts" ADD CONSTRAINT "contracts_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "contacts" ADD CONSTRAINT "contacts_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "photos" ADD CONSTRAINT "photos_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "contracts" ADD CONSTRAINT "contracts_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "photos" ADD CONSTRAINT "photos_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

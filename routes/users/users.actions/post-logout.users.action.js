@@ -14,10 +14,7 @@ async function postLogoutUser(req, res) {
   logger.init("post logout user");
 
   const authHeader = req.headers.authorization;
-
-  console.log(authHeader);
   
-
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     logger.error("Missing or invalid token");
     return res.status(UNAUTHORIZED).json({ message: "Missing or invalid token" });
