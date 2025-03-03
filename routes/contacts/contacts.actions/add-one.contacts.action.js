@@ -3,16 +3,17 @@ const { OK } = require("../../../constants/http-codes");
 const contactMethods = require("../contacts.methods");
 const { NotFound, Unauthorized, BadRequest } = require("../../../constants/errors");
 const usersMethods = require("../../users/users.methods");
+const companiesMethods = require("../../companies/companies.methods");
 
 /**
- * PATCH /contacts/:id
- * Эндпоинт редактирования данных контакта.
+ * POST /contacts
+ * Эндпоинт создания данных контакта.
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}
  */
-async function editOne(req, res) {
-  logger.init("edit contact");
+async function addOne(req, res) {
+  logger.init("create contact");
   const { id } = req.params;
   const data = req.body;
 
@@ -30,23 +31,18 @@ async function editOne(req, res) {
     throw new NotFound("User dos not exists");
   }
 
-  const contact = await contactMethods.getOne(id);
-  if (!contact) {
-    logger.error("Contact not found")
-    throw new NotFound("Contact not found");
+  const company = await companiesMethods.getOne(data.companyId)
+  if (!company) {
+    logger.error("Company dos not exists");
+    throw new NotFound("Company dos not exists");
   }
 
-  if (contact.companies.userId !== userId) {
-    logger.error("Unauthorized access");
-    throw new Unauthorized("Unauthorized access");
-  }
+  const contract = await contactMethods.addOne(data);
 
-  const updated = await contactMethods.editOne(id, data);
-
-  res.status(OK).json(updated);
+  res.status(OK).json(contract);
   logger.success();
 }
 
 module.exports = {
-  editOne,
+  addOne,
 };

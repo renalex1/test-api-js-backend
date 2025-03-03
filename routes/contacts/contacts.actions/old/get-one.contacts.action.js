@@ -1,8 +1,7 @@
 const logger = require("../../../services/logger.service")(module);
 const { OK } = require("../../../constants/http-codes");
-const contactMethods = require("../contacts.methods");
+const contactMethods = require("../../../DB/sample-db/methods/contact");
 const { NotFound } = require("../../../constants/errors");
-const usersMethods = require("../../users/users.methods");
 
 /**
  * GET /contacts/:id
@@ -15,18 +14,8 @@ async function getOne(req, res) {
   logger.init("get contact");
   const { id } = req.params;
 
-  const { id: userId } = req.payload;
-
-  const user = await usersMethods.getOne(userId)
-  if (!user) {
-    logger.error("User dos not exists");
-    throw new NotFound("User dos not exists");
-  }
-
-  const contact = await contactMethods.getOne(id);
-
-  if (!contact || contact.deletedAt) {
-    logger.error("Contact not found");
+  const contact = contactMethods.getOne(id);
+  if (!contact) {
     throw new NotFound("Contact not found");
   }
 

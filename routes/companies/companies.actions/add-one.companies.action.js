@@ -7,8 +7,8 @@ const { getUrlForRequest } = require("../../../helpers/url.helper");
 const { NotFound } = require("../../../constants/errors");
 
 /**
- * PATCH /companies/:id
- * Эндпоинт редактирования данных компании.
+ * POST /companies
+ * Эндпоинт создания данных компании.
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}

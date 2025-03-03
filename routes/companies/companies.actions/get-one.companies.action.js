@@ -27,7 +27,7 @@ async function getOne(req, res) {
 
   const existingCompany = await companyMethods.getOne(id);
 
-  if (!existingCompany) {
+  if (!existingCompany || existingCompany.deletedAt) {
     logger.error("Company dos not exists");
     throw new NotFound("Company dos not exists");
   }

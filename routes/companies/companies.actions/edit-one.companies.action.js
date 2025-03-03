@@ -34,6 +34,7 @@ async function editOne(req, res) {
 
   const company = await companyMethods.getOne(id);
   if (!company) {
+    logger.error("Company not found");
     throw new NotFound("Company not found");
   }
 

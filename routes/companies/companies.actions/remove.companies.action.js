@@ -7,7 +7,7 @@ const usersMethods = require("../../users/users.methods");
 
 /**
  * DELETE /companies/:id
- * Эндпоинт удаления компанию.
+ * Эндпоинт удаления компании.
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}
