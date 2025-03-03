@@ -157,5 +157,54 @@ module.exports = {
                 },
             },
         },
+        delete: {
+            summary: "Delete a company",
+            description: "Remove a company by its ID. Only authorized users can perform this action.",
+            tags: ["Companies"],
+            parameters: [
+                {
+                    in: "path",
+                    name: "id",
+                    required: true,
+                    description: "The ID of the company to delete",
+                    schema: {
+                        type: "integer",
+                        example: 1,
+                    },
+                },
+            ],
+            responses: {
+                [OK]: {
+                    description: "Company deleted successfully",
+                    content: {
+                        "application/json": {
+                            example: {
+                                message: "Company deleted successfully",
+                            },
+                        },
+                    },
+                },
+                [NOT_FOUND]: {
+                    description: "Company not found",
+                    content: {
+                        "application/json": {
+                            example: {
+                                message: "Company not found",
+                            },
+                        },
+                    },
+                },
+                [BAD_REQUEST]: {
+                    description: "Invalid request parameters",
+                    content: {
+                        "application/json": {
+                            example: {
+                                message: "Invalid company ID",
+                            },
+                        },
+                    },
+                },
+            },
+        },
     },
 };

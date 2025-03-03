@@ -70,13 +70,6 @@ const removeImage = [
 ];
 
 const addCompany = [
-  check("userId")
-    .isInt()
-    .withMessage({
-      code: UnprocessableEntity,
-      message: "userId: must be an integer",
-    }),
-
   check("name")
     .isString()
     .notEmpty()
@@ -169,10 +162,6 @@ const addCompany = [
 ];
 
 const getCompanies = [
-  query("userId")
-    .isNumeric()
-    .withMessage({ code: UnprocessableEntity, message: "userId must be a numeric value" }),
-
   query("status")
     .optional()
     .isIn(["active", "inactive"])

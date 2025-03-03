@@ -9,16 +9,6 @@ module.exports = {
             parameters: [
                 {
                     in: "query",
-                    name: "userId",
-                    required: true,
-                    description: "ID of user",
-                    schema: {
-                        type: "integer",
-                        example: 1,
-                    },
-                },
-                {
-                    in: "query",
                     name: "status",
                     required: false,
                     description: "Filter companies by status (e.g., 'active', 'inactive').",
@@ -218,7 +208,6 @@ module.exports = {
                         schema: {
                             type: "object",
                             properties: {
-                                userId: { type: "number", example: 1 },
                                 name: { type: "string", example: "ООО Новая Компания" },
                                 shortName: { type: "string", example: "Новая Компания" },
                                 businessEntity: { type: "string", example: "ООО" },
@@ -247,7 +236,7 @@ module.exports = {
                                     },
                                 },
                             },
-                            required: ["userId", "name", "businessEntity", "status"],
+                            required: ["name", "businessEntity", "status"],
                         },
                     },
                 },

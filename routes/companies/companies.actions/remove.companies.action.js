@@ -1,24 +1,20 @@
+const path = require("path");
 const logger = require("../../../services/logger.service")(module);
 const { OK } = require("../../../constants/http-codes");
+const { NotFound, BadRequest, Unauthorized } = require("../../../constants/errors");
 const companyMethods = require("../companies.methods");
-const { parseOne } = require("../companies.service");
-const { getUrlForRequest } = require("../../../helpers/url.helper");
-const { NotFound, Unauthorized } = require("../../../constants/errors");
 const usersMethods = require("../../users/users.methods");
 
-
 /**
- * PATCH /companies/:id
- * Эндпоинт редактирования данных компании.
+ * DELETE /companies/:id
+ * Эндпоинт удаления компанию.
  * @param {Object} req
  * @param {Object} res
  * @return {Promise<void>}
  */
-async function editOne(req, res) {
-  logger.init("edit company");
+async function removeCompany(req, res) {
+  logger.init("remove company");
   const { id } = req.params;
-  const data = req.body;
-
   const { id: userId } = req.payload;
 
   const user = await usersMethods.getOne(userId)
@@ -27,13 +23,9 @@ async function editOne(req, res) {
     throw new NotFound("User dos not exists");
   }
 
-  const companyUniq = await companyMethods.getByNameOrEntity(data.name, data.businessEntity);
-  if (companyUniq) {
-    throw new NotFound("Company or businessEntity is exist");
-  }
-
   const company = await companyMethods.getOne(id);
   if (!company) {
+    logger.error("Company not found");
     throw new NotFound("Company not found");
   }
 
@@ -42,14 +34,17 @@ async function editOne(req, res) {
     throw new Unauthorized("Unauthorized access");
   }
 
+  if (company.deletedAt) {
+    logger.error("Company already deleted");
+    throw new BadRequest("Company already deleted");
+  }
 
-  const updated = await companyMethods.editOne(id, data);
+  companyMethods.removeOne(company.id);
 
-  const photoUrl = getUrlForRequest(req);
-  res.status(OK).json(parseOne(updated, photoUrl));
+  res.status(OK).json('Company seccsessuly  deleted');
   logger.success();
 }
 
 module.exports = {
-  editOne,
+  removeCompany,
 };

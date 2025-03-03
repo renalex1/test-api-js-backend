@@ -3,10 +3,9 @@ const { OK } = require("../../../constants/http-codes");
 const companyMethods = require("../companies.methods");
 const usersMethods = require("../../users/users.methods");
 const { getUrlForRequest } = require("../../../helpers/url.helper");
-const { NotFound } = require("../../../constants/errors");
+const { NotFound, Unauthorized } = require("../../../constants/errors");
 const { parseOne } = require("../companies.service");
-const { PrismaClient, AuthMethod, UserRole } = require('@prisma/client');
-const prisma = new PrismaClient();
+
 
 /**
  * GET /companies/
@@ -19,15 +18,15 @@ async function getCompanies(req, res) {
   logger.init("get filtered companies");
   const query = req.query;
 
-  const user = await usersMethods.getOne(query.userId)
+  const { id: userId } = req.payload;
 
+  const user = await usersMethods.getOne(userId)
   if (!user) {
     logger.error("User dos not exists");
     throw new NotFound("User dos not exists");
   }
 
-  const existingCompany = await companyMethods.getCompanies(query);
-
+  const existingCompany = await companyMethods.getCompanies(userId, query);
 
   if (!existingCompany) {
     logger.error("Company dos not exists");

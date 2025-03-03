@@ -4,4 +4,5 @@ module.exports = {
   ...require("./get-by-name.company.method"),
   ...require("./add-one.company.method"),
   ...require("./get-filtered.company.method"),
+  ...require("./remove.company.method"),
 };

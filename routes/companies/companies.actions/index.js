@@ -5,4 +5,5 @@ module.exports = {
   ...require("./add-image.companies.action"),
   ...require("./remove-image.companies.action"),
   ...require("./get-filtered.companies.action"),
+  ...require("./remove.companies.action"),
 };

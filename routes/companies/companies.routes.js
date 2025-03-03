@@ -19,6 +19,11 @@ module.exports = Router()
   .patch("/companies/:id",
     ...validator.editOne,
     actions.editOne)
+  .delete(
+    "/companies/:id",
+    // ...validator.removeImage,
+    actions.removeCompany
+  )
   .post(
     "/companies/:id/image",
     fileHandler.fields([{ name: "file", maxCount: 1 }]),

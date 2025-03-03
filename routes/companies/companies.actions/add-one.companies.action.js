@@ -17,18 +17,19 @@ async function addOne(req, res) {
   logger.init("add company");
   const data = req.body;
 
-    const user = await usersMethods.getOne(data.userId)
-  
-    if (!user) {
-      logger.error("User dos not exists");
-      throw new NotFound("User dos not exists");
-    }
+  const { id: userId } = req.payload;
+
+  const user = await usersMethods.getOne(userId)
+  if (!user) {
+    logger.error("User dos not exists");
+    throw new NotFound("User dos not exists");
+  }
 
   const company = await companyMethods.getByNameOrEntity(data.name, data.businessEntity);
   if (company) {
     throw new NotFound("Company or businessEntity is exist");
   }
-
+  data.userId = userId
   const create = await companyMethods.addOne(data);
 
   const photoUrl = getUrlForRequest(req);
