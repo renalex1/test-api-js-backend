@@ -3,8 +3,8 @@ const logger = require("../../../services/logger.service")(module);
 const { OK } = require("../../../constants/http-codes");
 const imagesConfig = require("../../../config").images;
 const imageService = require("../../../services/image.service");
-const { NotFound, BadRequest } = require("../../../constants/errors");
-const companyMethods = require("../companies.methods")
+const { NotFound } = require("../../../constants/errors");
+const companyMethods = require("../../../DB/sample-db/methods/company");
 
 /**
  * DELETE /companies/:id/image
@@ -21,37 +21,21 @@ async function removeImage(req, res) {
 
   const company = companyMethods.getOne(id);
   if (!company) {
-    logger.error("Company not found");
     throw new NotFound("Company not found");
   }
 
-  const file = await companyMethods.getFileByName(fileName);
-
-  if (!file) {
-    logger.error("File not exist");
-    throw new BadRequest("File not exist");
-  }
-  if (file.deletedAt) {
-    logger.error("File already deleted");
-    throw new BadRequest("File already deleted");
-  }
-
   const filePath = path.resolve(
-    `${imagesConfig.imagesDir}/${userId}/${file.name}`
+    `${imagesConfig.imagesDir}/${userId}/${fileName}`
   );
-
-  console.log('file', file);
-  console.log('filePath', filePath);
   await imageService.removeImage(filePath);
 
-  const thumbPath = path.resolve(`${imagesConfig.imagesDir}${userId}/${file.thumbPath}`)
-
-  console.log('thumbPath', thumbPath);
+  const fileExtension = path.extname(fileName).toLowerCase();
+  const _fileName = fileName.split(".").slice(0, -1).join(".");
+  const thumbName = `${_fileName}_${imagesConfig.thumbSize}x${imagesConfig.thumbSize}${fileExtension}`;
+  const thumbPath = path.resolve(
+    `${imagesConfig.imagesDir}${userId}/${thumbName}`
+  );
   await imageService.removeImage(thumbPath);
-
-  companyMethods.removeFile(file.id)
-
-
 
   res.status(OK).json();
   logger.success();

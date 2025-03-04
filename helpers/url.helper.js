@@ -19,9 +19,9 @@ function getUrlForRequest(req) {
  * @return {string}
  */
 function getFileUrl(req, fileName) {
-  const { id: userId } = req.payload;
+  const { user } = req;
   const url = getUrlForRequest(req);
-  return `${url}images/${userId}/${fileName}`;
+  return `${url}/images/${user}/${fileName}`;
 }
 
 module.exports = { getUrlForRequest, getFileUrl };

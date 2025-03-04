@@ -9,22 +9,14 @@
     "test": "NODE_ENV=test node node_modules/.bin/jest --runInBand --silent --detectOpenHandles",
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "check-pretty": "prettier --check \"./**/*.{js,jsx,json}\"",
-    "lint": "eslint .",
-    "prisma:migrate": "npx prisma migrate dev",
-    "prisma:reset": "npx prisma migrate reset",
-    "prisma:generate": "npx prisma generate",
-    "prisma:studio": "npx prisma studio",
-    "prisma:seed": "node prisma/seed.cjs"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@prisma/client": "^6.4.1",
-    "argon2": "^0.41.1",
     "body-parser": "^1.19.1",
     "cookie-parser": "~1.4.6",
     "cors": "^2.8.5",
     "debug": "~4.3.3",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "~4.17.2",
     "express-async-errors": "^3.1.1",
     "express-http-context": "^1.2.4",
     "express-useragent": "^1.0.15",
@@ -54,8 +46,7 @@
     "eslint-plugin-security": "^1.5.0",
     "jest": "^28.1.1",
     "nodemon": "^3.0.1",
-    "prettier": "^2.7.0",
-    "prisma": "^6.4.1"
+    "prettier": "^2.7.0"
   },
   "jest": {
     "testMatch": [

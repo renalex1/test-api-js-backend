@@ -1,8 +1,7 @@
 const logger = require("../../../services/logger.service")(module);
 const { OK } = require("../../../constants/http-codes");
-const contactMethods = require("../contacts.methods");
-const { NotFound, Unauthorized, BadRequest } = require("../../../constants/errors");
-const usersMethods = require("../../users/users.methods");
+const contactMethods = require("../../../DB/sample-db/methods/contact");
+const { NotFound } = require("../../../constants/errors");
 
 /**
  * PATCH /contacts/:id
@@ -16,32 +15,12 @@ async function editOne(req, res) {
   const { id } = req.params;
   const data = req.body;
 
-  const { id: userId } = req.payload;
-
-  const isEmailFree = await contactMethods.checkEmailExist(data.email)
-  if (isEmailFree) {
-    logger.error("This email is in used");
-    throw new BadRequest("This email is in used");
-  }
-
-  const user = await usersMethods.getOne(userId)
-  if (!user) {
-    logger.error("User dos not exists");
-    throw new NotFound("User dos not exists");
-  }
-
-  const contact = await contactMethods.getOne(id);
+  const contact = contactMethods.getOne(id);
   if (!contact) {
-    logger.error("Contact not found")
     throw new NotFound("Contact not found");
   }
 
-  if (contact.companies.userId !== userId) {
-    logger.error("Unauthorized access");
-    throw new Unauthorized("Unauthorized access");
-  }
-
-  const updated = await contactMethods.editOne(id, data);
+  const updated = contactMethods.editOne(id, data);
 
   res.status(OK).json(updated);
   logger.success();

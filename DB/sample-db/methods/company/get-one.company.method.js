@@ -20,7 +20,7 @@ function getOne(id) {
       {
         name: "0b8fc462dcabf7610a91.png",
         filepath: "0b8fc462dcabf7610a91.png",
-        thumbPath: "0b8fc462dcabf7610a91_160x160.png",
+        thumbpath: "0b8fc462dcabf7610a91_160x160.png",
       },
     ],
     createdAt: "2020-11-21T08:03:00Z",
