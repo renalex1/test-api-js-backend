@@ -8,6 +8,7 @@ module.exports = Router()
   .use(isAuthorized)
   .use(require("./companies"))
   .use(require("./contacts"))
+  .use(require("./contracts"))
   .use(() => {
     throw new NotFound();
   });

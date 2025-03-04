@@ -12,16 +12,7 @@ async function removeFile(id) {
     data: { deletedAt: new Date() },
   });
 
-  await prisma.company.update({
-    where: { id: photo.companyId },
-    data: {
-      photos: {
-        disconnect: { id: photo.id },
-      },
-    },
-  });
-
-  return true;
+  return !!photo;
 }
 
 module.exports = { removeFile };
