@@ -108,6 +108,9 @@ CREATE UNIQUE INDEX "companies_business_entity_key" ON "companies"("business_ent
 -- CreateIndex
 CREATE UNIQUE INDEX "contacts_email_key" ON "contacts"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "photos_name_key" ON "photos"("name");
+
 -- AddForeignKey
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 

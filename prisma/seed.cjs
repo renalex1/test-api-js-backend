@@ -26,15 +26,15 @@ const photosInfo = [
   {
     name: "0b8fc462dcabf7610a91.png",
     filepath: "uploads/0b8fc462dcabf7610a91.png",
-    thumbpath: "uploads/thumbnails/0b8fc462dcabf7610a91_160x160.png",
+    thumbPath: "uploads/thumbnails/0b8fc462dcabf7610a91_160x160.png",
   }, {
-    name: "0b8fc462dcabf7610a91.png",
-    filepath: "uploads/0b8fc462dcabf7610a91.png",
-    thumbpath: "uploads/thumbnails/0b8fc462dcabf7610a91_160x160.png",
+    name: "0b8fc462dcabf7610a92.png",
+    filepath: "uploads/0b8fc462dcabf7610a92.png",
+    thumbPath: "uploads/thumbnails/0b8fc462dcabf7610a92_160x160.png",
   }, {
-    name: "0b8fc462dcabf7610a91.png",
-    filepath: "uploads/0b8fc462dcabf7610a91.png",
-    thumbpath: "uploads/thumbnails/0b8fc462dcabf7610a91_160x160.png",
+    name: "0b8fc462dcabf7610a93.png",
+    filepath: "uploads/0b8fc462dcabf7610a93.png",
+    thumbPath: "uploads/thumbnails/0b8fc462dcabf7610a93_160x160.png",
   },
 ]
 
@@ -86,7 +86,7 @@ async function main() {
       await prisma.photo.create({
         data: {
           ...photosInfo[i],
-          companies: {
+          company: {
             connect: { id: createdCompany.id },
           }
         }

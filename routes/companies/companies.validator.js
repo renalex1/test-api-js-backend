@@ -150,12 +150,12 @@ const addCompany = [
       message: "photos.filepath: must be a string",
     }),
 
-  check("photos.*.thumbpath")
+  check("photos.*.thumbPath")
     .optional()
     .isString()
     .withMessage({
       code: UnprocessableEntity,
-      message: "photos.thumbpath: must be a string",
+      message: "photos.thumbPath: must be a string",
     }),
 
   validate,

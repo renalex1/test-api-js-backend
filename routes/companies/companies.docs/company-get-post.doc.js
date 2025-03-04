@@ -109,7 +109,7 @@ module.exports = {
                                                         properties: {
                                                             name: { type: "string" },
                                                             filepath: { type: "string" },
-                                                            thumbpath: { type: "string" },
+                                                            thumbPath: { type: "string" },
                                                         },
                                                     },
                                                     nullable: true,
@@ -161,7 +161,7 @@ module.exports = {
                                             {
                                                 name: "company_logo.png",
                                                 filepath: "uploads/company_logo.png",
-                                                thumbpath: "uploads/thumbnails/company_logo_160x160.png",
+                                                thumbPath: "uploads/thumbnails/company_logo_160x160.png",
                                             },
                                         ],
                                         contacts: [
@@ -231,7 +231,7 @@ module.exports = {
                                         properties: {
                                             name: { type: "string", example: "company_logo.png" },
                                             filepath: { type: "string", example: "uploads/company_logo.png" },
-                                            thumbpath: { type: "string", example: "uploads/thumbnails/company_logo_160x160.png" },
+                                            thumbPath: { type: "string", example: "uploads/thumbnails/company_logo_160x160.png" },
                                         },
                                     },
                                 },
@@ -262,7 +262,7 @@ module.exports = {
                                     {
                                         name: "company_logo.png",
                                         filepath: "uploads/company_logo.png",
-                                        thumbpath: "uploads/thumbnails/company_logo_160x160.png",
+                                        thumbPath: "uploads/thumbnails/company_logo_160x160.png",
                                     },
                                 ],
                                 createdAt: "2025-03-02T10:00:00Z",
